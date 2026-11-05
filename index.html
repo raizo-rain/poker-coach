@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Pocket Poker Coach</title>
 <meta name="theme-color" content="#eef2ee" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0d1511" media="(prefers-color-scheme: dark)">
@@ -46,7 +46,8 @@ img{max-width:100%}
   --cardface:#fbf8ef; color-scheme:dark }
 
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;touch-action:manipulation}
+body{touch-action:manipulation;overscroll-behavior:none}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.45;
   padding-left:max(12px, env(safe-area-inset-left, 0px));padding-right:max(12px, env(safe-area-inset-right, 0px));padding-block:10px 28px}
 .app{max-width:500px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
@@ -111,7 +112,7 @@ h1 span{color:var(--bad)}
 .mini{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px}
 .f{display:flex;flex-direction:column;gap:3px;min-width:0}
 .f.wide{grid-column:1/-1}
-select,input[type=number]{font:inherit;font-size:14px;color:var(--ink);background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:5px 8px;width:100%;min-width:0;height:32px}
+select,input[type=number]{font:inherit;font-size:16px;color:var(--ink);background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:5px 8px;width:100%;min-width:0;height:32px}
 input[type=number]{font-family:var(--mono)}
 .seg{display:flex;gap:3px;background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:2px;height:32px}
 .seg button{flex:1;border:0;background:transparent;border-radius:6px;font-size:12px;font-weight:700;color:var(--muted);padding:0 4px}
@@ -1637,6 +1638,11 @@ $('toCall').oninput = e => { st.callE = Math.max(0, +e.target.value || 0); $('ca
 $('raised').onchange = e => { st.raised = e.target.checked; schedule(); };
 $('heroStack').oninput = e => { st.heroE = Math.max(0, +e.target.value || 0); saveTable(); renderStacks(); schedule(); };
 $('villStack').oninput = e => { st.villE = Math.max(0, +e.target.value || 0); saveTable(); renderStacks(); schedule(); };
+// No zooming: block pinch gestures (iOS Safari) and double-tap zoom
+['gesturestart', 'gesturechange', 'gestureend'].forEach(t => document.addEventListener(t, e => e.preventDefault(), { passive: false }));
+document.addEventListener('touchmove', e => { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
+let lastTap = 0;
+document.addEventListener('touchend', e => { const now = Date.now(); if (now - lastTap < 300 && !e.target.closest('input,select,textarea')) e.preventDefault(); lastTap = now; }, { passive: false });
 applyLang();
 render();
 </script>
