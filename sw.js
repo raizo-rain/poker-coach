@@ -1,6 +1,6 @@
 // Offline support: keep a copy of the app on the phone.
 // Change VERSION when you upload a new index.html so phones pick up the update.
-const VERSION = 'ppc-v2';
+const VERSION = 'ppc-v3';
 const APP = ['./', 'index.html', 'manifest.webmanifest', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {

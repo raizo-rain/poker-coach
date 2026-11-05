@@ -1377,15 +1377,8 @@ function applyLang() {
 const toBB = e => (+e || 0) / st.bb;
 const effBB = () => Math.max(0.5, Math.min(+st.heroE || 0, +st.villE || 0) / st.bb);
 
-// Example hand only on the very first open, so the coach is visible straight away; afterwards start on an empty table
-(function example() {
-  let seen = false;
-  try { seen = localStorage.getItem('ppc-seen') === '1'; localStorage.setItem('ppc-seen', '1'); } catch (e) {}
-  if (seen) { st.potE = Math.round(6.5 * st.bb * 100) / 100; st.raiseE = Math.round(3 * st.bb * 100) / 100; return; }
-  const C = s => RANKS.indexOf(s[0]) * 4 + 'shdc'.indexOf(s[1]);
-  st.cards = [C('As'), C('Ks'), C('Kd'), C('9s'), C('4s'), null, null];
-  st.pos = Math.min(3, st.n - 1); st.seated = true; st.oppRange = 'bb'; st.potE = 5.5 * st.bb; st.example = true;
-})();
+// Always start on an empty table
+st.potE = Math.round(6.5 * st.bb * 100) / 100; st.raiseE = Math.round(3 * st.bb * 100) / 100;
 function newHand() {
   st.cards = [null, null, null, null, null, null, null]; st.situation = 'folded'; st.callE = 0; st.history = 0; st.raised = false;
   st.opps = 1; st.potE = Math.round(6.5 * st.bb * 100) / 100; st.raiseE = Math.round(3 * st.bb * 100) / 100; st.example = false; st.seated = false; render();
